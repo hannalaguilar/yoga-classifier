@@ -30,11 +30,11 @@ def video_to_frames(pose_name: str, n: int = 60):
 
 
 if __name__ == '__main__':
-    for name in definitions.poses:
+    for POSE_NAME in definitions.poses:
         # check if folder exists
-        p = definitions.DATA_RAW / name
+        p = definitions.DATA_RAW / POSE_NAME
         if not p.is_dir():
             p.mkdir(parents=True, exist_ok=True)
-        print(name)
-        video_to_frames(name)
+        print(POSE_NAME)
+        video_to_frames(POSE_NAME)
         print('\n------')
