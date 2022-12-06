@@ -5,7 +5,7 @@ from yoga import definitions
 from yoga.data.video_data import get_video_list
 
 
-def video_to_frames(pose_name: str, n: int = 30):
+def video_to_frames(pose_name: str, n: int = 60):
     # Paths
     pose_external_path = definitions.DATA_EXTERNAL / pose_name
     video_paths = get_video_list(pose_external_path)
@@ -31,6 +31,10 @@ def video_to_frames(pose_name: str, n: int = 30):
 
 if __name__ == '__main__':
     for name in definitions.poses:
+        # check if folder exists
+        p = definitions.DATA_RAW / name
+        if not p.is_dir():
+            p.mkdir(parents=True, exist_ok=True)
         print(name)
         video_to_frames(name)
         print('\n------')
