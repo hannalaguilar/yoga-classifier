@@ -51,7 +51,7 @@ def video_df(folder_path: Path,
     """
     # Video list
     video_list = [p for p in folder_path.iterdir()
-                  if p.suffix.lower() == 'mp4']
+                  if p.suffix.lower() == '.mp4']
 
     # Process data
     video_time = [get_video_time(p) for p in video_list]
