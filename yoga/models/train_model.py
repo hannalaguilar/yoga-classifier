@@ -197,6 +197,9 @@ def main(data_path,
                     palette='tab10', ax=ax)
     ax.set_xlabel('tsne 1')
     ax.set_ylabel('tsne 2')
+    # plt.legend('')
+    # for i, txt in enumerate(names):
+    #     ax.annotate(txt, (X_embedded[:, 0][i], X_embedded[:, 1][i]))
 
     test_acc_list = []
     for _ in tqdm(range(n_runs)):
