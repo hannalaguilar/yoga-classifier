@@ -26,11 +26,10 @@ lookup_table = {'bhuj': 'cobra',
                 'vriksh': 'tree'}
 
 
-def get_video_list(folder_path: Path, extension: str = '.mp4') -> list:
-    return [p for p in folder_path.iterdir() if p.suffix.lower() == extension]
-
-
 def get_video_time(video_path: Path):
+    """
+    How many seconds does a video last.
+    """
     # Read video
     video_cap = cv2.VideoCapture(str(video_path))
     # Get some video parameters
@@ -41,7 +40,19 @@ def get_video_time(video_path: Path):
     return video_time
 
 
-def create_video_df(video_list: list) -> pd.DataFrame:
+def video_df(folder_path: Path,
+             save: bool = True,
+             verbose: bool = True) -> pd.DataFrame:
+    """
+    Dataframe with the data of the 88 videos:
+     - person
+     - pose
+     - time (s)
+    """
+    # Video list
+    video_list = [p for p in folder_path.iterdir()
+                  if p.suffix.lower() == 'mp4']
+
     # Process data
     video_time = [get_video_time(p) for p in video_list]
     video_names = [p.stem for p in video_list]
@@ -53,24 +64,30 @@ def create_video_df(video_list: list) -> pd.DataFrame:
     df['person'] = df['person'].str.capitalize()
     df['pose'].replace(lookup_table, inplace=True)
     assert df.pose.nunique() == 6
+
     #  Short analysis
-    print('Nº videos for each pose')
-    print(df.groupby('pose').count()['person'])
-    print('-------------------')
-    print('Time(s) for each pose')
-    print(df.groupby('pose').sum()['time(s)'])
-    print('-------------------')
-    print('Unique people')
-    print(df.person.nunique())
-    print('-------------------')
-    print('People and number of videos')
-    print(df.groupby('person').count())
+    if verbose:
+        print('Nº videos for each pose')
+        print(df.groupby('pose').count()['person'])
+        print('-------------------')
+        print('Time(s) for each pose')
+        print(df.groupby('pose').sum()['time(s)'])
+        print('-------------------')
+        print('Unique people')
+        print(df.person.nunique())
+        print('-------------------')
+        print('People and number of videos')
+        print(df.groupby('person').count())
+
+    # Save dataframe
+    if save:
+        p = definitions.DATA_PROCESSED / 'video_stat'
+        p.mkdir(parents=True, exist_ok=True)
+        df.to_csv(p / 'video_list.csv')
 
     return df
 
 
 if __name__ == '__main__':
-    VIDEO_LIST = get_video_list(definitions.DATA_EXTERNAL /
-                                'Yoga_Vid_Collected')
-    VIDEO_DF = create_video_df(VIDEO_LIST)
-    VIDEO_DF.to_csv(definitions.DATA_PROCESSED / 'data_videos.csv')
+    VIDEO_DF = video_df(definitions.DATA_EXTERNAL /
+                        'Yoga_Vid_Collected')
