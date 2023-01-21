@@ -2,13 +2,18 @@ import cv2
 from tqdm import tqdm
 
 from yoga import definitions
-from yoga.data.video_data import get_video_list
 
 
 def video_to_frames(pose_name: str, n: int = 60):
+    """
+    Split video into frames every n seconds.
+    """
     # Paths
     pose_external_path = definitions.DATA_EXTERNAL / pose_name
-    video_paths = get_video_list(pose_external_path)
+    video_paths = [p for p in pose_external_path.iterdir()
+                   if p.suffix.lower() == 'mp4']
+
+    # Split video into frames
     for video_path in tqdm(video_paths,
                            total=len(video_paths),
                            desc='Processing the videos'):
@@ -30,6 +35,7 @@ def video_to_frames(pose_name: str, n: int = 60):
 
 
 if __name__ == '__main__':
+    # For each pose split the video into images
     for POSE_NAME in definitions.poses:
         # check if folder exists
         p = definitions.DATA_RAW / POSE_NAME
