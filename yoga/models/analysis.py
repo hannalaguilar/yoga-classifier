@@ -13,8 +13,8 @@ def plot_bar_parameter(mean_df: pd.DataFrame, i: int, ylabel: str):
             ecolor='k', capsize=10,
             alpha=0.7, edgecolor='k',
             color=colors)
-    if ylabel == 'Acuracy':
-        plt.ylim(0, 1.1)
+    if ylabel == 'Accuracy':
+        plt.ylim(0.9, 1.01)
     plt.ylabel(ylabel)
     plt.tight_layout()
     return fig

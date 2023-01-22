@@ -122,8 +122,8 @@ class FullBodyPoseEmbedder:
           landmarks - NumPy array with 3D landmarks of shape (N, 3).
 
         Result:
-          Numpy array with pose embedding of shape (M, 3) where `M` is the number of
-          pairwise distances.
+          Numpy array with pose embedding of shape (M, 3) where `M` is the
+          number of pairwise distances.
         """
         embedding = np.array([
             # One joint.
@@ -250,7 +250,9 @@ def load_pose_samples(pose_samples_folder,
         df = df[df.columns[~df.columns.astype(int).isin(col_removed)]]
         for row in df.values:
             assert len(row) == n_landmarks * n_dimensions + 1, f'Wrong' \
-                                                               f' number of values: {len(row)}'
+                                                               f' number of ' \
+                                                               f'values: ' \
+                                                               f'{len(row)}'
             landmarks = np.array(row[1:], np.float32).reshape(
                 [n_landmarks, n_dimensions])
             pose_samples.append(PoseSample(
