@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 from yoga import definitions
 
 
@@ -49,15 +49,18 @@ if __name__ == '__main__':
     mean_df = mean_df.reindex(['knn', 'svm', 'mlp'])
 
     # Figures
-
     fig = plot_bar_parameter(mean_df)
     fig.savefig(definitions.ROOT_DIR / 'reports' /
                 'figures' / 'model_results.png')
-    # fig2 = plot_bar_parameter(mean_df, 2, 'Train time (s)')
-    # fig3 = plot_bar_parameter(mean_df, 4, 'Test time (s)')
 
-    # Save figures
-    # figures = [fig1, fig2, fig3]
-    # figure_names = [f'fig{i}.png' for i in range(1, len(figures) + 1)]
-    # for fig, fig_name in zip(figures, figure_names):
-    #     fig.savefig(definitions.ROOT_DIR / 'reports' / 'figures' / fig_name)
+    # Class distribution
+    df = pd.read_csv(definitions.DATA_PROCESSED / 'final_dataset.csv',
+                     index_col=0)
+    mean_df = df.groupby('class').count()
+
+    plt.figure(figsize=(4, 3))
+    sns.barplot(x=mean_df.index,
+                y=mean_df.name,
+                palette='tab10', alpha=0.85)
+    plt.ylabel('# Images')
+    plt.xlabel('Postures')
